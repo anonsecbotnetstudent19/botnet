@@ -1,10 +1,9 @@
 # Use an official Ubuntu runtime as a base image
 FROM ubuntu:latest
 
-# Update the package repository and install openssh-client, nohup, and gcc
+# Update the package repository and install openssh-client and gcc
 RUN apt-get update && \
     apt-get install -y openssh-client && \
-    apt-get install -y nohup && \
     apt-get install -y build-essential
 
 # Set the working directory to /app
