@@ -1,11 +1,8 @@
-# Use a base image
-FROM ubuntu:latest
+# Use a base image commonly supported on Render
+FROM debian:buster-slim
 
-# Update the package list
-RUN apt update
-
-# Install wget
-RUN apt install -y wget
+# Update the package list and install wget
+RUN apt-get update && apt-get install -y wget
 
 # Set the working directory
 WORKDIR /app
